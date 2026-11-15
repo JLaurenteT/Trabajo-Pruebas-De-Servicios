@@ -1,0 +1,189 @@
+{
+  "info": {
+    "_postman_id": "cb5f484b-1c9f-4b2a-992c-bfcb636b5645",
+    "name": "JSONPlaceholder - Pruebas de Servicios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31072724"
+  },
+  "item": [
+    {
+      "name": "posts",
+      "item": [
+        {
+          "name": "Crear Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Post creado exitosamente (201)\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "const data = pm.response.json();\r",
+                  "pm.test(\"El post tiene un ID asignado\", function () {\r",
+                  "    pm.expect(data).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El título coincide con el enviado\", function () {\r",
+                  "    pm.expect(data.title).to.eql(\"Nuevo post de prueba\");\r",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Nuevo post de prueba\",\r\n    \"body\": \"Contenido del post para pruebas de servicios\",\r\n    \"userId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/posts",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Post consultado con éxito (200)\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "const data = pm.response.json();\r",
+                  "const savedId = pm.collectionVariables.get(\"postId\");\r",
+                  "\r",
+                  "pm.test(\"El ID coincide con la variable consultada\", function () {\r",
+                  "    pm.expect(data.id).to.eql(parseInt(savedId));\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El post contiene datos de usuario\", function () {\r",
+                  "    pm.expect(data).to.have.property(\"userId\");\r",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/posts/{{postId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "posts",
+                "{{postId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Post actualizado (200)\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "const data = pm.response.json();\r",
+                  "pm.test(\"El título se actualizó correctamente\", function () {\r",
+                  "    pm.expect(data.title).to.eql(\"Post actualizado NTT\");\r",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 1,\r\n    \"title\": \"Post actualizado NTT\",\r\n    \"body\": \"Contenido modificado correctamente para la prueba\",\r\n    \"userId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/posts/{{postId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "posts",
+                "{{postId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Post eliminado exitosamente (200)\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.collectionVariables.unset(\"postId\");"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/posts/{{postId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "posts",
+                "{{postId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "https://jsonplaceholder.typicode.com"
+    }
+  ]
+}
